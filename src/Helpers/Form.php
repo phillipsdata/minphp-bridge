@@ -1,6 +1,5 @@
 <?php
 
-use Minphp\Bridge\Initializer;
 use Minphp\Form\Form as MinphpForm;
 
 /**
