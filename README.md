@@ -26,7 +26,8 @@ following elements are required to be set:
 - `minphp.config` *array* containing:
     - `dir` *string*
 - `minphp.language` *array* containing:
-    - `default` *string*
+    - `default` *string* 'en_us'
+    - `dir` *string*
     - `pass_through` *bool*
 - `minphp.session` *array* containing the following keys (all optional):
     - `db` *array* containing:
