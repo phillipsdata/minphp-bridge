@@ -12,7 +12,6 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "container-interop/container-interop": "^1.1",
         "minphp/container": "^2.0",
         "minphp/acl": "^1.0",
         "minphp/cache": "^1.0",
@@ -41,6 +40,11 @@
             "src/Components",
             "src/Helpers",
             "src/Lib"
+        ]
+    },
+    "autoload-dev": {
+        "classmap": [
+            "tests"
         ]
     }
 }

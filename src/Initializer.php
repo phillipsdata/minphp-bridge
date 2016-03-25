@@ -2,7 +2,7 @@
 namespace Minphp\Bridge;
 
 use Minphp\Container\ContainerAwareInterface;
-use Interop\Container\ContainerInterface;
+use Minphp\Container\ContainerInterface;
 
 /**
  * Initializer for the Bridge
@@ -50,5 +50,25 @@ class Initializer implements ContainerAwareInterface
     public function getContainer()
     {
         return $this->container;
+    }
+
+    /**
+     * Run the initializer
+     */
+    public function run()
+    {
+        $this->defineConstants();
+    }
+
+    /**
+     * Define global constants
+     */
+    private function defineConstants()
+    {
+        foreach ($this->container->get('minphp.constants') as $key => $value) {
+            if (!defined($key)) {
+                define($key, $value);
+            }
+        }
     }
 }

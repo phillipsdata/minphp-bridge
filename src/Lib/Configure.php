@@ -12,7 +12,36 @@ use Minphp\Configure\Configure as MinphpConfigure;
 class Configure
 {
     private static $configure;
-    private static $config;
+    private static $config = [];
+    private static $containerConfigMappings = [
+        'System.debug' => [],
+        'System.benchmark' => [],
+        'System.default_structure' => ['minphp.mvc', 'default_structure'],
+        'System.default_controller' => ['minphp.mvc', 'default_controller'],
+        'System.default_view' => ['minphp.mvc', 'default_view'],
+        'System.error_view' => [],
+        'System.view_ext' => ['minphp.mvc', 'view_extension'],
+        'System.404_forwarding' => [],
+        'System.cli_render_views' => [],
+        'Caching.on' => ['minphp.cache', 'enabled'],
+        'Cache.dir_permissions' => ['minphp.cache', 'dir_permission'],
+        'Caching.ext' => ['minphp.cache', 'extension'],
+        'Language.default' => ['minphp.language', 'default'],
+        'Language.allow_pass_through' => ['minphp.language', 'pass_through'],
+        'Database.lazy_connecting' => [],
+        'Database.fetch_mode' => [],
+        'Database.reuse_connection' => [],
+        'Database.profile' => [],
+        'Session.ttl' => ['minphp.session', 'ttl'],
+        'Session.cookie_ttl' => ['minphp.session', 'cookie_ttl'],
+        'Session.cookie_name' => [],
+        'Session.tbl' => ['minphp.session', 'db', 'tbl'],
+        'Session.tbl_id' => ['minphp.session', 'db', 'tbl_id'],
+        'Session.tbl_exp' => ['minphp.session', 'db', 'tbl_exp'],
+        'Session.tbl_val' => ['minphp.session', 'db', 'tbl_val'],
+        'Session.session_name' => ['minphp.session', 'session_name'],
+        'Session.session_httponly' => ['minphp.session', 'session_httponly']
+    ];
 
     /**
      * Singleton
@@ -20,7 +49,9 @@ class Configure
     private function __construct()
     {
         $container = Initializer::get()->getContainer();
-        self::$config = $container->get('minphp.config');
+        if ($container->has('minphp.config')) {
+            self::$config = $container->get('minphp.config');
+        }
         self::$configure = new MinphpConfigure();
     }
 
@@ -75,7 +106,38 @@ class Configure
      */
     public static function set($name, $value)
     {
+        self::updateContainerParam($name, $value);
         self::getInstance()->set($name, $value);
+    }
+
+    /**
+     * Update parameter in the container that maps to the given config setting
+     *
+     * @param string $name The config setting
+     * @param mixed $value The new value of the config setting
+     */
+    private static function updateContainerParam($name, $value)
+    {
+        if (array_key_exists($name, self::$containerConfigMappings)
+            && !empty(self::$containerConfigMappings[$name])
+        ) {
+            $container = Initializer::get()->getContainer();
+
+            $paramName = self::$containerConfigMappings[$name][0];
+            $keys = array_slice(self::$containerConfigMappings[$name], 1);
+            $param = $container->get($paramName);
+            $option = &$param;
+
+            foreach ($keys as $key) {
+                if (!array_key_exists($key, $option)) {
+                    return;
+                }
+                $option = &$option[$key];
+            }
+            $option = $value;
+
+            $container->set($paramName, $param);
+        }
     }
 
     /**

@@ -1,0 +1,35 @@
+<?php
+
+use Minphp\Container\Container;
+use Minphp\Bridge\Initializer;
+
+/**
+ * @coversDefaultClass \Configure
+ */
+class ConfigureTest extends PHPUnit_Framework_TestCase
+{
+    /**
+     * @covers ::set
+     * @covers ::updateContainerParam
+     * @covers ::getInstance
+     */
+    public function testSetShouldUpdateContainer()
+    {
+        $init = Initializer::get();
+        $container = new Container();
+        $container->set(
+            'minphp.session',
+            ['db' => ['tbl' => 'sessions']]
+        );
+        $init->setContainer($container);
+
+        $expected = 'other_sessions';
+
+        Configure::set('Session.tbl', $expected);
+
+        $this->assertEquals(
+            $expected,
+            $container->get('minphp.session')['db']['tbl']
+        );
+    }
+}
