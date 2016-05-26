@@ -69,7 +69,25 @@ following elements are required to be set:
 - `pdo` *PDO*
 
 ```php
-// Assuming $container is already defined with the required elements...
+// Assuming $container is already defined with the required elements, for example:
+
+$container->set('loader', function ($c) {
+    $constants = $c->get('minphp.constants');
+    $loader = Loader::get();
+    $loader->setPaths([
+        $constants['APPDIR'],
+        'models' => $constants['MODELDIR'],
+        'controllers' => $constants['CONTROLLERDIR'],
+        'components' => $constants['COMPONENTDIR'],
+        'helpers' => $constants['HELPERDIR'],
+        'plugins' => $constants['PLUGINDIR']
+    ]);
+
+    return $loader;
+});
+
+// ...
+
 
 \Minphp\Bridge\Initializer::get()
     ->setContainer($container)

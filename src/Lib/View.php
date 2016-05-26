@@ -1,8 +1,6 @@
 <?php
 
 use Minphp\Bridge\Initializer;
-use Loader;
-use Exception;
 
 /**
  * Allows the creation of views.
