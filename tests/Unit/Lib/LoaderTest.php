@@ -11,7 +11,7 @@ class LoaderTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $fixtureDir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Fixtures'
-            . DIRECTORY_SEPARATOR . 'Loader' . DIRECTORY_SEPARATOR;
+            . DIRECTORY_SEPARATOR . 'App' . DIRECTORY_SEPARATOR;
 
         $appDir = $fixtureDir . 'app' . DIRECTORY_SEPARATOR;
 
