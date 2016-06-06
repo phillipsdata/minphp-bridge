@@ -2,6 +2,9 @@
 
 use Minphp\Bridge\Initializer;
 
+/**
+ * Controller Bridge
+ */
 abstract class Controller
 {
     /**

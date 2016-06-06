@@ -18,7 +18,7 @@ class Cache
      *
      * @return Minphp\Cache\Cache
      */
-    private static function get()
+    public static function get()
     {
         if (!self::$cache) {
             $container = Initializer::get()->getContainer();
