@@ -70,17 +70,17 @@ abstract class Controller
     /**
      * @var array Names of all Models this Controller uses
      */
-    protected $uses;
+    protected $uses = [];
 
     /**
      * @var array Names of all Components this Controller uses
      */
-    protected $components;
+    protected $components = [];
 
     /**
      * @var array Names of all Helpers this Controller and child Views use
      */
-    protected $helpers;
+    protected $helpers = [];
 
     /**
      * @var \Minphp\Container\ContainerInterface

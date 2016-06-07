@@ -54,10 +54,11 @@ class Cache
      *
      * @param string $name The name of the entry to remove
      * @param string $path The path within the cache directory to remove
+     * @return boolean True if removed, false if no such file exists
      */
     public static function clearCache($name, $path = null)
     {
-        self::get()->remove($name, $path);
+        return self::get()->remove($name, $path);
     }
 
     /**
@@ -78,9 +79,11 @@ class Cache
      *
      * @param string $name The name of the entry to fetch
      * @param string $path The path within the cache directory to read from
+     * @return string A string containing the file contents if the cache file
+     *  exists and has not yet expired, false otherwise.
      */
     public static function fetchCache($name, $path = null)
     {
-        self::get()->fetch($name, $path);
+        return self::get()->fetch($name, $path);
     }
 }

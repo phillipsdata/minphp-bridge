@@ -1,8 +1,5 @@
 <?php
 
-use Minphp\Container\Container;
-use Minphp\Bridge\Initializer;
-
 /**
  * @coversDefaultClass \Loader
  */

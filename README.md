@@ -60,7 +60,10 @@ following elements are required to be set:
     - `default_controller` *string*
     - `default_structure` *string*
     - `default_view` *string*
+    - `error_view` *string*
     - `view_extension` *string*
+    - `cli_render_views` *bool*
+    - `404_forwarding` * bool*
 - `minphp.session` *array* containing the following keys (all optional):
     - `db` *array* containing:
         - `tbl` *string* The session database table
@@ -83,6 +86,7 @@ happen to be the default values settings from minPHP 0.x.
 
 ```php
 use Minphp\Container\Container;
+use Minphp\Bridge\Initializer;
 
 $container = new Container();
 
@@ -165,7 +169,10 @@ $container->set('minphp.mvc', function ($c) {
         'default_controller' => 'main',
         'default_structure' => 'structure',
         'default_view' => 'default',
-        'view_extension' => '.pdt'
+        'error_view' => 'errors',
+        'view_extension' => '.pdt',
+        'cli_render_views' => false,
+        '404_forwarding' => false
     ];
 });
 
@@ -213,7 +220,7 @@ $container->set('pdo', function ($c) {
 
 
 
-\Minphp\Bridge\Initializer::get()
+Initializer::get()
     ->setContainer($container)
     ->run();
 ```
