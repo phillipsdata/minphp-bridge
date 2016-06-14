@@ -81,6 +81,10 @@ class Loader
         }
 
         $class_file = self::fromCamelCase($class);
+        if (substr($class, 0, 1) === '_') {
+            $class_file = substr($class, 1);
+        }
+
         $file_name = $class_file . '.php';
 
         // Class file is in the directory or a subdirectory with a similar name

@@ -30,7 +30,17 @@ class Dispatcher extends Controller
     private static function getRouter()
     {
         if (self::$router === null) {
+            $container = Initializer::get()->getContainer();
             self::$router = Router::get();
+            self::$router->setWebDir(
+                $container->get('minphp.constants')['WEBDIR']
+            );
+            self::$router->setPluginDir(
+                $container->get('minphp.constants')['PLUGINDIR']
+            );
+            self::$router->setDefaultController(
+                $container->get('minphp.mvc')['default_controller']
+            );
         }
         return self::$router;
     }
@@ -62,9 +72,9 @@ class Dispatcher extends Controller
     {
         $router = self::getRouter();
 
-        list($plugin, $controller, $action, $get, $uri, $uriStr) = $router->routesTo(
+        list($plugin, $controller, $action, $get, $uri, $uriStr) = array_values($router->routesTo(
             $requestUri
-        );
+        ));
 
         $container = Initializer::get()->getContainer();
 
@@ -93,6 +103,13 @@ class Dispatcher extends Controller
         $loader = $container->get('loader');
         $controllerClass = (is_numeric(substr($controller, 0, 1)) ? '_' : '')
             . $loader->toCamelCase($controller);
+
+        if (!class_exists($controllerClass)) {
+            throw new Exception(
+                sprintf('%s is not a valid controller', $controllerClass),
+                404
+            );
+        }
 
         $ctrl = new $controllerClass($controller, $action, $isCli);
         $ctrl->uri = $uri;
@@ -124,7 +141,8 @@ class Dispatcher extends Controller
                         '%s is not a callable method in controller %s',
                         $action,
                         $controllerClass
-                    )
+                    ),
+                    404
                 );
             }
         } else {
@@ -133,7 +151,8 @@ class Dispatcher extends Controller
                     '%s is not a valid method in controller %s',
                     $action,
                     $controllerClass
-                )
+                ),
+                404
             );
         }
 

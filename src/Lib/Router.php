@@ -275,10 +275,16 @@ class Router
 
         // Begin finding plugin, controller, action
         if (!empty($pathParts)) {
-            $controller = array_pop($pathParts);
+            $part = array_pop($pathParts);
+            if (!empty($part)) {
+                $controller = $part;
+            }
         }
         if (!empty($pathParts)) {
-            $action = array_pop($pathParts);
+            $part = array_pop($pathParts);
+            if (!empty($part)) {
+                $action = $part;
+            }
         }
 
         $pluginPath = self::$plugindir . DIRECTORY_SEPARATOR . $controller
@@ -291,7 +297,10 @@ class Router
             if (empty($controller)) {
                 $controller = self::$defaultController;
             } elseif (!empty($pathParts)) {
-                $action = array_pop($pathParts);
+                $part = array_pop($pathParts);
+                if (!empty($part)) {
+                    $action = $part;
+                }
             }
         }
         // End finding plugin, controller, action

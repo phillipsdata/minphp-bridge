@@ -296,17 +296,21 @@ abstract class Controller
 
         if (null === $view) {
             $view = $this->view->file;
-            if (null !== $view) {
-                $view = get_class($this) . (
-                    $this->action != "index"
-                    ? '_' . strtolower($this->action)
-                    : ''
+            if (null === $view) {
+                $view = $this->container->get('loader')->fromCamelCase(
+                    get_class($this)
+                    . (
+                        $this->action !== 'index'
+                        && $this->action !== null
+                        ? '_' . strtolower($this->action)
+                        : ''
+                    )
                 );
             }
         }
 
         // Prepare the structure
-        $structure_view = null;
+        $structure_view = $this->structure_view;
         $structure_dir = null;
         if (($pos = strrpos($this->structure_view, DIRECTORY_SEPARATOR)) > 0) {
             $structure_dir = substr($this->structure_view, 0, $pos);

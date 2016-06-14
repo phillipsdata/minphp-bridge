@@ -122,11 +122,12 @@ in your composer.json file under the "autoload" section like so:
 namespace App\ServiceProviders;
 
 use Pimple\ServiceProviderInterface;
-use Minphp\Container\Container;
+use Pimple\Container;
 use Cache;
 use View;
 use Loader;
 use PDO;
+use Configure;
 
 class MinphpBridge implements ServiceProviderInterface
 {
@@ -156,7 +157,7 @@ class MinphpBridge implements ServiceProviderInterface
         $container->set('loader', function ($c) {
             $constants = $c->get('minphp.constants');
             $loader = Loader::get();
-            $loader->setPaths([
+            $loader->setDirectories([
                 $constants['APPDIR'],
                 'models' => $constants['MODELDIR'],
                 'controllers' => $constants['CONTROLLERDIR'],
@@ -169,7 +170,18 @@ class MinphpBridge implements ServiceProviderInterface
         });
 
         $container->set('pdo', function ($c) {
-            return new PDO('...', '...', '...');
+            Configure::load('database');
+            $dbInfo = Configure::get('Database.profile');
+            return new PDO(
+                $dbInfo['driver'] . ':dbname=' . $dbInfo['database']
+                . ';host=' . $dbInfo['host'] . (
+                    isset($dbInfo['port'])
+                    ? ':' . $dbInfo['port']
+                    : ''
+                ),
+                $dbInfo['user'],
+                $dbInfo['pass']
+            );
         });
     }
 
@@ -300,9 +312,11 @@ Update `/lib/init.php` so it looks like the following:
 
 ```php
 <?php
+error_reporting(-1);
+
 // include autoloader
 require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR
-    'vendor' . DIRECTORY_SEPARATOR 'autoload.php';
+    . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 
 // Fetch available services
 $services = require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'config'
@@ -317,9 +331,9 @@ foreach ($services as $service) {
 }
 
 // Run bridge
-Minphp\Bridge\Initializer::get()
-    ->setContainer($container)
-    ->run();
+$bridge = Minphp\Bridge\Initializer::get();
+$bridge->setContainer($container);
+$bridge->run();
 
 // Set the container
 Configure::set('container', $container);

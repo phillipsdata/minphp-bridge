@@ -58,6 +58,7 @@ class Initializer implements ContainerAwareInterface
     public function run()
     {
         $this->defineConstants();
+        $this->setAutoload();
     }
 
     /**
@@ -70,5 +71,17 @@ class Initializer implements ContainerAwareInterface
                 define($key, $value);
             }
         }
+    }
+
+    /**
+     * Register the autoloader
+     */
+    private function setAutoload()
+    {
+        spl_autoload_register(
+            array($this->container->get('loader'), 'autoload'),
+            true,
+            true
+        );
     }
 }
