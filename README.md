@@ -123,7 +123,6 @@ namespace App\ServiceProviders;
 
 use Pimple\ServiceProviderInterface;
 use Minphp\Container\Container;
-use Minphp\Bridge\Initializer;
 use Cache;
 use View;
 use Loader;

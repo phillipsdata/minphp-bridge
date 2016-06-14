@@ -148,6 +148,7 @@ class Configure
      */
     public static function load($file, $dir = null)
     {
+        $configure = self::getInstance();
         $file .= '.php';
 
         if (null === $dir) {
@@ -157,7 +158,7 @@ class Configure
         }
 
         foreach (self::readFile($dir . $file) as $name => $value) {
-            self::getInstance()->set($name, $value);
+            $configure->set($name, $value);
         }
     }
 
