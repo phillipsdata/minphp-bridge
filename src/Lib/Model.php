@@ -1,6 +1,7 @@
 <?php
 
 use Minphp\Db\PdoConnection;
+use Minphp\Bridge\Initializer;
 
 /**
  * Model Bridge
