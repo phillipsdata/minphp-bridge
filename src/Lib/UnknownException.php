@@ -9,14 +9,16 @@ class UnknownException extends ErrorException
     /**
      * Placeholder for backwards compatbility
      *
-     * @param int $err_no
-     * @param string $err_str
-     * @param string $err_file
-     * @param in $err_line
+     * @param int $severity
+     * @param string $message
+     * @param string $file
+     * @param in $line
      */
-    public static function setErrorHandler($err_no, $err_str, $err_file, $err_line)
+    public static function setErrorHandler($severity, $message, $file, $line)
     {
-        // unused
+        if (error_reporting() & $severity) {
+            throw new UnknownException($message, 0, $severity, $file, $line);
+        }
     }
 
     /**
@@ -26,7 +28,18 @@ class UnknownException extends ErrorException
      */
     public static function setExceptionHandler(Exception $e)
     {
-        // unused
+        if (error_reporting() === 0) {
+            return;
+        }
+
+        echo sprintf(
+            'Uncaught %s, code %d in %s on line %d',
+            get_class($e),
+            $e->getCode(),
+            $e->getFile(),
+            $e->getLine(),
+            $e->getMessage()
+        );
     }
 
     /**
@@ -34,6 +47,17 @@ class UnknownException extends ErrorException
      */
     public static function setFatalErrorHandler()
     {
-        // unused
+        $error = error_get_last();
+
+        if (!empty($error)
+            && ($error['type'] & E_ERROR)
+            && (error_reporting() & $error['type'])
+        ) {
+            try {
+                Dispatcher::raiseError($e);
+            } catch (Exception $e) {
+                echo $e->getMessage();
+            }
+        }
     }
 }

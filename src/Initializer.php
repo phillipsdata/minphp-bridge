@@ -58,6 +58,8 @@ class Initializer implements ContainerAwareInterface
      */
     public function run()
     {
+        $this->setDefaultTimezone();
+        $this->setErrorHandlers();
         $this->defineConstants();
         $this->setAutoload();
         $this->setRouter();
@@ -112,5 +114,25 @@ class Initializer implements ContainerAwareInterface
     {
         require_once $this->container->get('minphp.constants')['CONFIGDIR']
             . 'routes.php';
+    }
+
+    /**
+     * Set the default timezone
+     */
+    private function setDefaultTimezone()
+    {
+        if (function_exists("date_default_timezone_set")) {
+            date_default_timezone_set(@date_default_timezone_get());
+        }
+    }
+
+    /**
+     * Sets error handlers
+     */
+    private function setErrorHandlers()
+    {
+        set_error_handler(['UnknownException', 'setErrorHandler']);
+        set_exception_handler(['UnknownException', 'setExceptionHandler']);
+        register_shutdown_function(['UnknownException', 'setFatalErrorHandler']);
     }
 }
