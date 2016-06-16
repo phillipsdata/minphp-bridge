@@ -53,6 +53,29 @@ class Configure
             self::$config = $container->get('minphp.config');
         }
         self::$configure = new MinphpConfigure();
+
+        // Initialize config
+        foreach (self::$containerConfigMappings as $key => $map) {
+            if (!empty($map) && $container->has($map[0])) {
+                $item = $container->get($map[0]);
+                $value = $item;
+                $set = array_slice($map, 1);
+                $found = true;
+
+                // Map reduction
+                for ($i = 0; $i < count($set); $i++) {
+                    if (!array_key_exists($set[$i], $value)) {
+                        $found = false;
+                        break;
+                    }
+                    $value = $value[$set[$i]];
+                }
+
+                if ($found) {
+                    $this->set($key, $value);
+                }
+            }
+        }
     }
 
     /**
