@@ -12,33 +12,24 @@ use Minphp\Language\Language as MinphpLanguage;
 class Language extends MinphpLanguage
 {
     /**
-     * @var bool Flag whether config setting have been set
-     */
-    private static $configSet = false;
-
-    /**
      * Ensure default language, default director, and allow pass through
      * settings are set
      */
     private static function ensureSettings()
     {
-        if (!self::$configSet) {
-            $config = Initializer::get()->getContainer()
-                ->get('minphp.language');
+        $config = Initializer::get()->getContainer()
+            ->get('minphp.language');
 
-            if (array_key_exists('default', $config)) {
-                self::setDefaultLanguage($config['default']);
-            }
+        if (array_key_exists('default', $config)) {
+            self::setDefaultLanguage($config['default']);
+        }
 
-            if (array_key_exists('dir', $config)) {
-                self::setDefaultDir($config['dir']);
-            }
+        if (array_key_exists('dir', $config)) {
+            self::setDefaultDir($config['dir']);
+        }
 
-            if (array_key_exists('pass_through', $config)) {
-                self::allowPassthrough($config['pass_through']);
-            }
-
-            self::$configSet = true;
+        if (array_key_exists('pass_through', $config)) {
+            self::allowPassthrough($config['pass_through']);
         }
     }
 
