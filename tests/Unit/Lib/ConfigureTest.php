@@ -15,13 +15,19 @@ class ConfigureTest extends PHPUnit_Framework_TestCase
      */
     public function testSetShouldUpdateContainer()
     {
+        $session = ['db' => ['tbl' => 'sessions']];
+
         $init = Initializer::get();
         $container = new Container();
         $container->set(
             'minphp.session',
-            ['db' => ['tbl' => 'sessions']]
+            function ($c) use ($session) {
+                return $session;
+            }
         );
         $init->setContainer($container);
+
+        $this->assertEquals($session, $container->get('minphp.session'));
 
         $expected = 'other_sessions';
 

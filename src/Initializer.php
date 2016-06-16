@@ -59,6 +59,7 @@ class Initializer implements ContainerAwareInterface
     {
         $this->defineConstants();
         $this->setAutoload();
+        $this->loadRoutes();
     }
 
     /**
@@ -83,5 +84,14 @@ class Initializer implements ContainerAwareInterface
             true,
             true
         );
+    }
+
+    /**
+     * Load the routes
+     */
+    private function loadRoutes()
+    {
+        require_once $this->container->get('minphp.constants')['CONFIGDIR']
+            . 'routes.php';
     }
 }

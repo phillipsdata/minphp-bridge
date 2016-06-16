@@ -136,6 +136,7 @@ class Configure
             }
             $option = $value;
 
+            $container->offsetUnset($paramName);
             $container->set($paramName, $param);
         }
     }

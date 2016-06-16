@@ -158,7 +158,7 @@ class MinphpBridge implements ServiceProviderInterface
             $constants = $c->get('minphp.constants');
             $loader = Loader::get();
             $loader->setDirectories([
-                $constants['APPDIR'],
+                $constants['ROOTWEBDIR'] . $constants['APPDIR'],
                 'models' => $constants['MODELDIR'],
                 'controllers' => $constants['CONTROLLERDIR'],
                 'components' => $constants['COMPONENTDIR'],
