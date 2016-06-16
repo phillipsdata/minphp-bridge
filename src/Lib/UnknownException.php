@@ -33,7 +33,7 @@ class UnknownException extends ErrorException
         }
 
         echo sprintf(
-            'Uncaught %s, code %d in %s on line %d',
+            "Uncaught %s, code %d in %s on line %d \nMessage: %s",
             get_class($e),
             $e->getCode(),
             $e->getFile(),
