@@ -50,7 +50,7 @@ class Language extends MinphpLanguage
     {
         // @codingStandardsIgnoreEnd
         self::ensureSettings();
-        call_user_func_array('parent::getText', func_get_args());
+        return call_user_func_array('parent::getText', func_get_args());
     }
 
     /**
@@ -59,7 +59,7 @@ class Language extends MinphpLanguage
     public static function getText($key, $return = false)
     {
         self::ensureSettings();
-        call_user_func_array('parent::getText', func_get_args());
+        return call_user_func_array('parent::getText', func_get_args());
     }
 
     /**
