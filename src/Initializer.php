@@ -3,6 +3,7 @@ namespace Minphp\Bridge;
 
 use Minphp\Container\ContainerAwareInterface;
 use Minphp\Container\ContainerInterface;
+use Router;
 
 /**
  * Initializer for the Bridge
@@ -59,6 +60,7 @@ class Initializer implements ContainerAwareInterface
     {
         $this->defineConstants();
         $this->setAutoload();
+        $this->setRouter();
         $this->loadRoutes();
     }
 
@@ -83,6 +85,23 @@ class Initializer implements ContainerAwareInterface
             array($this->container->get('loader'), 'autoload'),
             true,
             true
+        );
+    }
+
+    /**
+     * Setup the router
+     */
+    private function setRouter()
+    {
+        $router = Router::get();
+        $router->setWebDir(
+            $this->container->get('minphp.constants')['WEBDIR']
+        );
+        $router->setPluginDir(
+            $this->container->get('minphp.constants')['PLUGINDIR']
+        );
+        $router->setDefaultController(
+            $this->container->get('minphp.mvc')['default_controller']
         );
     }
 
