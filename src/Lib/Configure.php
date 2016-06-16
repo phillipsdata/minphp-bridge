@@ -19,7 +19,7 @@ class Configure
         'System.default_structure' => ['minphp.mvc', 'default_structure'],
         'System.default_controller' => ['minphp.mvc', 'default_controller'],
         'System.default_view' => ['minphp.mvc', 'default_view'],
-        'System.error_view' => [],
+        'System.error_view' => ['minphp.mvc', 'error_view'],
         'System.view_ext' => ['minphp.mvc', 'view_extension'],
         'System.404_forwarding' => [],
         'System.cli_render_views' => [],
