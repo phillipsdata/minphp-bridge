@@ -360,7 +360,7 @@ longer required in your project.
 - helpers/pagination/
 - helpers/xml/
 - config/core.php
-- config/database.php
+- config/database.php (unless you used it in your `MinphpBridge` service provider)
 - config/session.php
 - lib/ - **except the modified `init.php` file**
 
