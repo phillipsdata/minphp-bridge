@@ -322,7 +322,9 @@ class Router
         }
 
         if (isset($parsedUri['query'])) {
-            parse_str($parsedUri['query'], $get);
+            $query = [];
+            parse_str($parsedUri['query'], $query);
+            $get = array_merge($get, $query);
         }
         // End setting GET params
 

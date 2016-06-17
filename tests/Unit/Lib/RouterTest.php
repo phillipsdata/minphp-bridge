@@ -209,6 +209,17 @@ class RouterTest extends PHPUnit_Framework_TestCase
                 ]
             ],
             [
+                'controller/action/get1/get2?a=b&c=d',
+                [
+                    'plugin' => null,
+                    'controller' => 'controller',
+                    'action' => 'action',
+                    'get' => ['get1', 'get2', 'a' => 'b', 'c' => 'd'],
+                    'uri' => ['controller', 'action', 'get1', 'get2', '?a=b&c=d'],
+                    'uri_str' => 'controller/action/get1/get2?a=b&c=d'
+                ]
+            ],
+            [
                 'controller/action/key1:value1/key2:value2',
                 [
                     'plugin' => null,
