@@ -55,7 +55,7 @@ following elements are required to be set:
     - `MODELDIR` *string*
     - `PLUGINDIR` *string*
     - `ROOTWEBDIR` *string*
-    - `VEDNORDIR` *string*
+    - `VENDORDIR` *string*
     - `VIEWDIR` *string*
     - `WEBDIR` *string*
 - `minphp.language` *array* containing:
