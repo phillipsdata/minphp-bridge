@@ -348,7 +348,8 @@ abstract class Controller
      */
     protected static function redirect($uri = null)
     {
-        $base_uri = $this->container->get('minphp.constants')['WEBDIR'];
+        $base_uri = Initializer::get()->getContainer()
+            ->get('minphp.constants')['WEBDIR'];
         if (null === $uri) {
             $uri = $base_uri;
         }
