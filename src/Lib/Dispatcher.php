@@ -104,6 +104,12 @@ class Dispatcher extends Controller
         $controllerClass = (is_numeric(substr($controller, 0, 1)) ? '_' : '')
             . $loader->toCamelCase($controller);
 
+        if ($plugin) {
+            $loader->autoload($plugin . '.' . $loader->toCamelCase($plugin) . 'Model');
+            $loader->autoload($plugin . '.' . $loader->toCamelCase($plugin) . 'Controller');
+            $loader->autoload($plugin . '.' . $controllerClass);
+        }
+
         if (!class_exists($controllerClass)) {
             throw new Exception(
                 sprintf('%s is not a valid controller', $controllerClass),
