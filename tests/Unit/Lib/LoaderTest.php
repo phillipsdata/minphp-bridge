@@ -80,7 +80,10 @@ class LoaderTest extends PHPUnit_Framework_TestCase
             ['MyComponent', null, 'components'],
             ['MyHelper', null, 'helpers'],
             ['MyPluginController', 'MyPlugin', null],
-            ['MyPluginMainController', 'MyPlugin', 'controllers']
+            ['MyPluginMainController', 'MyPlugin', 'controllers'],
+            ['MyOtherPluginMainModel', 'MyOtherPlugin', 'models'],
+            ['MyOtherPluginMainController', 'MyOtherPlugin', null],
+            ['MyOtherPluginController', 'MyOtherPlugin', null],
         ];
     }
 
@@ -99,6 +102,34 @@ class LoaderTest extends PHPUnit_Framework_TestCase
         foreach ($models as $model) {
             $this->assertInstanceOf("\\" . $model, $parent->{$model});
         }
+    }
+
+    /**
+     * @covers ::loadModels
+     * @covers ::loadInstances
+     * @covers ::toCamelCase
+     * @covers ::createInstance
+     * @dataProvider pluginModelProvider
+     */
+    public function testLoadPluginModels($model, $plugin)
+    {
+        $parent = new stdClass();
+        $models = [$plugin . '.' . $model];
+
+        Loader::loadModels($parent, $models);
+        $this->assertInstanceOf("\\" . $model, $parent->{$model});
+    }
+
+    /**
+     * Data Provider for testLoadPluginModels
+     *
+     * @return array
+     */
+    public function pluginModelProvider()
+    {
+        return [
+            ['MyOtherPluginMainModel', 'MyOtherPlugin']
+        ];
     }
 
     /**
