@@ -232,13 +232,27 @@ class Loader
                 $value = [];
             }
 
+            // Include plugin model/controller base classes, if they exist
+            // e.g. when a plugin loads another plugin
+            $class_parts = self::parseClassName($class);
+            $class_name = $class_parts['class'];
+            $plugin = $class_parts['plugin'];
+
+            if ($plugin !== null) {
+                $plugin_name = self::toCamelCase(trim($plugin, DIRECTORY_SEPARATOR));
+                self::autoload($plugin_name . '.' . $plugin_name . 'Model');
+                self::autoload($plugin_name . '.' . $plugin_name . 'Controller');
+            }
+
+            // Autoload the given class
             if (!class_exists($class, false)) {
                 self::autoload($class, $type);
             }
 
-            $object = self::createInstance($class, $value);
+            // Create an instance of the class by class name, not the class (e.g. Plugin.ClassName)
+            $object = self::createInstance($class_name, $value);
             foreach ($set_in as $parent) {
-                $parent->$class = $object;
+                $parent->$class_name = $object;
             }
         }
     }
