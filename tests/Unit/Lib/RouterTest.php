@@ -240,6 +240,28 @@ class RouterTest extends PHPUnit_Framework_TestCase
                     'uri' => ['my_plugin', 'my_plugin_main_controller', 'index', 'get1', 'get2'],
                     'uri_str' => 'my_plugin/my_plugin_main_controller/index/get1/get2/'
                 ]
+            ],
+            [
+                'my_plugin/my_plugin_main_controller/index/get1/get2/?a=b',
+                [
+                    'plugin' => 'my_plugin',
+                    'controller' => 'my_plugin_main_controller',
+                    'action' => 'index',
+                    'get' => ['get1', 'get2', 'a' => 'b'],
+                    'uri' => ['my_plugin', 'my_plugin_main_controller', 'index', 'get1', 'get2', '?a=b'],
+                    'uri_str' => 'my_plugin/my_plugin_main_controller/index/get1/get2/?a=b'
+                ]
+            ],
+            [
+                'my_plugin/my_plugin_main_controller/?a=b&c=d',
+                [
+                    'plugin' => 'my_plugin',
+                    'controller' => 'my_plugin_main_controller',
+                    'action' => null,
+                    'get' => ['a' => 'b', 'c' => 'd'],
+                    'uri' => ['my_plugin', 'my_plugin_main_controller', '?a=b&c=d'],
+                    'uri_str' => 'my_plugin/my_plugin_main_controller/?a=b&c=d'
+                ]
             ]
         );
     }
