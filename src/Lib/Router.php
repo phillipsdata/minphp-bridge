@@ -250,6 +250,12 @@ class Router
                 Router::filterURI($requestUri)
             )
         );
+
+        // Set URI to the current path
+        if ($parsedUri && !empty($parsedUri['path'])) {
+            $uri_str = $parsedUri['path'];
+        }
+
         if (!isset($parsedUri['query']) && $uri_str[strlen($uri_str)-1] !== '/') {
             $uri_str .= '/';
         }
@@ -269,20 +275,25 @@ class Router
         }
 
         if (isset($parsedUri['query'])) {
-            $uri[] = '?' . $parsedUri['query'];
+            $query = '?' . $parsedUri['query'];
+            $uri[] = $query;
+            $uri_str .= $query;
         }
         // End building URI
 
         // Begin finding plugin, controller, action
-        if (!empty($pathParts)) {
-            $part = array_pop($pathParts);
+        $uriParts = array_reverse($uri);
+
+        if (!empty($uriParts)) {
+            $part = array_pop($uriParts);
             if (!empty($part)) {
                 $controller = $part;
             }
         }
-        if (!empty($pathParts)) {
-            $part = array_pop($pathParts);
-            if (!empty($part)) {
+        if (!empty($uriParts)) {
+            $part = array_pop($uriParts);
+            // The action may be set if it is not a query string
+            if (!empty($part) && substr($part, 0, 1) !== '?') {
                 $action = $part;
             }
         }
@@ -296,9 +307,10 @@ class Router
             $action = null;
             if (empty($controller)) {
                 $controller = self::$defaultController;
-            } elseif (!empty($pathParts)) {
-                $part = array_pop($pathParts);
-                if (!empty($part)) {
+            } elseif (!empty($uriParts)) {
+                $part = array_pop($uriParts);
+                // The action may be set if it is not a query string
+                if (!empty($part) && substr($part, 0, 1) !== '?') {
                     $action = $part;
                 }
             }
@@ -306,9 +318,10 @@ class Router
         // End finding plugin, controller, action
 
         // Begin setting GET params
-        while (!empty($pathParts)) {
-            $part = array_pop($pathParts);
-            if (empty($part)) {
+        while (!empty($uriParts)) {
+            $part = array_pop($uriParts);
+            // Only assign GET parameters that are not query parameters
+            if (empty($part) || substr($part, 0, 1) === '?') {
                 continue;
             }
 
