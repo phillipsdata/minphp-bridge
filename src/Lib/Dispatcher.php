@@ -58,7 +58,7 @@ class Dispatcher extends Controller
             $requestUri .= $args[$i] . '/';
         }
 
-        self::dispatch($requestUri);
+        self::dispatch($requestUri, true);
     }
 
     /**
