@@ -43,7 +43,7 @@ class Session
             $options['cookie_httponly'] = $this->config['session_httponly'];
         }
 
-        $this->session = new MinphpSession(
+        self::$session = new MinphpSession(
             new PdoHandler(
                 $container->get('pdo'),
                 array_key_exists('db', $this->config)
@@ -53,7 +53,7 @@ class Session
             $options
         );
 
-        $this->session->start();
+        self::$session->start();
     }
 
     /**
