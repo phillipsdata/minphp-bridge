@@ -86,7 +86,7 @@ class Initializer implements ContainerAwareInterface
         spl_autoload_register(
             array($this->container->get('loader'), 'autoload'),
             true,
-            true
+            false
         );
     }
 
