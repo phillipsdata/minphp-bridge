@@ -24,7 +24,7 @@
         "minphp/language": "^1.1",
         "minphp/pagination": "^1.0",
         "minphp/record": "^2.0",
-        "minphp/session": "^1.0",
+        "minphp/session": "^1.1",
         "minphp/xml": "^1.0"
     },
     "require-dev": {

@@ -76,6 +76,9 @@ following elements are required to be set:
         - `tbl_id` *string* The ID database field
         - `tbl_exp` *string* The expiration database field
         - `tbl_val` *string* The value database field
+        - `ttl` *int* The session time-to-live, in seconds, relative to current
+server time (should be set to the same value as the other TTLs, e.g.,
+'max(ttl, cookie_ttl)' to correctly sync client and server session expirations)
     - `ttl` *int* Number of seconds to keep a session alive.
     - `cookie_ttl` *int* Number of seconds to keep long storage cookie alive.
     - `session_name` *string* Name of the session.
