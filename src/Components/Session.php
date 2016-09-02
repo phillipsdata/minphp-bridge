@@ -35,6 +35,15 @@ class Session
             $options['cookie_lifetime'] = $this->config['ttl'];
         }
 
+        // The garbage collector max lifetime should be set to the max session TTL being used
+        // to avoid deleting sessions prior to their expiration
+        if (array_key_exists('ttl', $this->config) || array_key_exists('cookie_ttl', $this->config)) {
+            $options['gc_maxlifetime'] = max(
+                (array_key_exists('ttl', $this->config) ? $this->config['ttl'] : 0),
+                (array_key_exists('cookie_ttl', $this->config) ? $this->config['cookie_ttl'] : 0)
+            );
+        }
+
         if (array_key_exists('session_name', $this->config)) {
             $options['name'] = $this->config['session_name'];
         }
@@ -120,7 +129,23 @@ class Session
      */
     public function setSessionCookie($path = '', $domain = '', $secure = false, $httponly = false)
     {
-        // handled automatically
+        // The default session cookie is set automatically by PHP.
+        // However, define a separate cookie as the 'remember me' cookie
+        if (array_key_exists('cookie_name', $this->config)) {
+            $cookieLifetime = array_key_exists('cookie_ttl', $this->config)
+                ? (int)$this->config['cookie_ttl']
+                : 0;
+
+            self::$session->cookie(
+                $this->config['cookie_name'],
+                null,
+                $cookieLifetime,
+                $path,
+                $domain,
+                $secure,
+                $httponly
+            );
+        }
     }
 
     /**
@@ -133,18 +158,30 @@ class Session
      */
     public function keepAliveSessionCookie($path = '', $domain = '', $secure = false, $httponly = false)
     {
-        $options = [
-            'cookie_path' => $path,
-            'cookie_domain' => $domain,
-            'cookie_secure' => $secure,
-            'cookie_httponly' => $httponly
-        ];
-        $lifetime = array_key_exists('cookie_ttl', $this->config)
-            ? $this->config['cookie_ttl']
-            : null;
+        $lifetime = array_key_exists('ttl', $this->config)
+            ? (int)$this->config['ttl']
+            : 0;
 
-        self::$session->setOptions($options);
-        self::$session->regenerate(true, $lifetime);
+        // Keep alive the other session cookie
+        if (array_key_exists('cookie_name', $this->config) && isset($_COOKIE[$this->config['cookie_name']])) {
+            // Update the lifetime to the cookie lifetime
+            $lifetime = array_key_exists('cookie_ttl', $this->config)
+                ? (int)$this->config['cookie_ttl']
+                : 0;
+
+            self::$session->cookie(
+                $this->config['cookie_name'],
+                null,
+                $lifetime,
+                $path,
+                $domain,
+                $secure,
+                $httponly
+            );
+        }
+
+        // Keep alive the default PHP session cookie
+        self::$session->cookie(null, null, $lifetime);
     }
 
     /**
@@ -153,17 +190,32 @@ class Session
      * @param string $path
      * @param string $domain
      * @param bool $secure
+     * @param bool $httponly
      */
-    public function clearSessionCookie($path = '', $domain = '', $secure = false)
+    public function clearSessionCookie($path = '', $domain = '', $secure = false, $httponly = false)
     {
         $options = [
             'cookie_path' => $path,
             'cookie_domain' => $domain,
-            'cookie_secure' => $secure
+            'cookie_secure' => $secure,
+            'cookie_httponly' => $httponly
         ];
         $lifetime = array_key_exists('ttl', $this->config)
             ? $this->config['ttl']
             : 0;
+
+        // Remove the separate cookie by setting it into the past
+        if (array_key_exists('cookie_name', $this->config) && isset($_COOKIE[$this->config['cookie_name']])) {
+            self::$session->cookie(
+                $this->config['cookie_name'],
+                null,
+                1,
+                $path,
+                $domain,
+                $secure,
+                $httponly
+            );
+        }
 
         self::$session->setOptions($options);
         self::$session->regenerate(true, $lifetime);
