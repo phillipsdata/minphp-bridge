@@ -245,7 +245,7 @@ class Loader
             }
 
             // Autoload the given class
-            if (!class_exists($class, false)) {
+            if (!class_exists($class, true)) {
                 self::autoload($class, $type);
             }
 
