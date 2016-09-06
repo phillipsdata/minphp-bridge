@@ -1,6 +1,6 @@
 <?php
 
-use Minphp\Html\Pagination as MinphpPagination;
+use Minphp\Pagination\Pagination as MinphpPagination;
 
 /**
  * Pagination Bridge
