@@ -54,7 +54,9 @@ class UnknownException extends ErrorException
             && (error_reporting() & $error['type'])
         ) {
             try {
-                Dispatcher::raiseError($e);
+                Dispatcher::raiseError(
+                    new UnknownException($error['message'], 0, $error['type'], $error['file'], $error['line'])
+                );
             } catch (Exception $e) {
                 echo $e->getMessage();
             }
