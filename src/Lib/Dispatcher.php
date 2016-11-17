@@ -178,26 +178,29 @@ class Dispatcher extends Controller
     /**
      * Print an exception thrown error page
      *
-     * @param Exception $e An exception thrown
-     * @throws Exception
+     * @param Exception|Throwable $e An exception/error thrown
+     * @throws Exception|Throwable
      */
-    public static function raiseError(Exception $e)
+    public static function raiseError($e)
     {
+        // Require an Exception (php5) or Throwable (php7) object
+        if (!($e instanceof Throwable) && !($e instanceof Exception)) {
+            return;
+        }
+
         $container = Initializer::get()->getContainer();
         $error = htmlentities($e->getMessage(), ENT_QUOTES, 'UTF-8');
 
-        if ($e instanceof Exception) {
-            if ($e->getCode() === 404
-                && $container->get('minphp.mvc')['404_forwarding']
-            ) {
-                header('HTTP/1.0 404 Not Found');
-                header(
-                    'Location: '
-                    . $container->get('minphp.constants')['WEBDIR']
-                    . '404/'
-                );
-                exit();
-            }
+        if ($e->getCode() === 404
+            && $container->get('minphp.mvc')['404_forwarding']
+        ) {
+            header('HTTP/1.0 404 Not Found');
+            header(
+                'Location: '
+                . $container->get('minphp.constants')['WEBDIR']
+                . '404/'
+            );
+            exit();
         }
 
         if (error_reporting() === 0) {
@@ -216,6 +219,8 @@ class Dispatcher extends Controller
                 $view->fetch('error', $container->get('minphp.mvc')['error_view'])
             );
             echo $structure->fetch('structure', $container->get('minphp.mvc')['error_view']);
+        } catch (Throwable $ex) {
+            throw $e;
         } catch (Exception $ex) {
             throw $e;
         }

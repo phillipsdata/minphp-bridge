@@ -134,6 +134,8 @@ class DispatcherTest extends PHPUnit_Framework_TestCase
 
                 try {
                     Dispatcher::raiseError($e);
+                } catch (Throwable $thrown) {
+                    $exception = $thrown;
                 } catch (Exception $thrown) {
                     $exception = $thrown;
                 }
