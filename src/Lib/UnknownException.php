@@ -24,11 +24,14 @@ class UnknownException extends ErrorException
     /**
      * Placeholder for backwards compatbility
      *
-     * @param Exception $e
+     * @param Exception|Throwable $e
      */
-    public static function setExceptionHandler(Exception $e)
+    public static function setExceptionHandler($e)
     {
-        if (error_reporting() === 0) {
+        // Require an Exception (php5) or Throwable (php7) object
+        if (error_reporting() === 0
+            || (!($e instanceof Throwable) && !($e instanceof Exception))
+        ) {
             return;
         }
 
@@ -57,7 +60,11 @@ class UnknownException extends ErrorException
                 Dispatcher::raiseError(
                     new UnknownException($error['message'], 0, $error['type'], $error['file'], $error['line'])
                 );
+            } catch (Throwable $e) {
+                // Catch 'Error' and 'Exception' in php7
+                echo $e->getMessage();
             } catch (Exception $e) {
+                // Catch Exceptions in php5, 'Error' is not supported
                 echo $e->getMessage();
             }
         }
