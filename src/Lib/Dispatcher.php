@@ -110,7 +110,7 @@ class Dispatcher extends Controller
             $loader->autoload($plugin . '.' . $controllerClass);
         }
 
-        if (!class_exists($controllerClass)) {
+        if (!class_exists($controllerClass) || !method_exists($controllerClass, 'preAction')) {
             throw new Exception(
                 sprintf('%s is not a valid controller', $controllerClass),
                 404
