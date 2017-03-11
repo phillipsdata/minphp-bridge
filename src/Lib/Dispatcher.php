@@ -213,6 +213,7 @@ class Dispatcher extends Controller
             $view = $container->get('view');
 
             $view->set('error', $error);
+            $view->set('exception', $e);
 
             $structure->set(
                 'content',
