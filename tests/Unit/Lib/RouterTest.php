@@ -166,7 +166,6 @@ class RouterTest extends PHPUnit_Framework_TestCase
         foreach ($parts as $part => $value) {
             $this->assertEquals($value, $result[$part]);
         }
-
     }
 
     /**

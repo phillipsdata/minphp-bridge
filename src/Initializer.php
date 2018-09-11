@@ -20,7 +20,7 @@ class Initializer implements ContainerAwareInterface
      */
     private function __construct()
     {
-
+        // Nothing to do
     }
 
     /**

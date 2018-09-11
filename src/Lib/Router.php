@@ -30,7 +30,7 @@ class Router
      */
     protected function __construct()
     {
-
+        // Nothing to do
     }
 
     /**
