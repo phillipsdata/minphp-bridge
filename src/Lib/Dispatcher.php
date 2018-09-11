@@ -97,7 +97,6 @@ class Dispatcher extends Controller
                 '',
                 $container->get('minphp.constants')['PLUGINDIR']
             ) . $plugin . DIRECTORY_SEPARATOR;
-
         }
 
         $loader = $container->get('loader');

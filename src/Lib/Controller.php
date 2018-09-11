@@ -159,7 +159,7 @@ abstract class Controller
      */
     public function index()
     {
-
+        // Nothing to do
     }
 
     /**
@@ -168,7 +168,7 @@ abstract class Controller
      */
     public function preAction()
     {
-
+        // Nothing to do
     }
 
     /**
@@ -177,7 +177,7 @@ abstract class Controller
      */
     public function postAction()
     {
-
+        // Nothing to do
     }
 
     /**
