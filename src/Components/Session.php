@@ -198,11 +198,9 @@ class Session
             'cookie_path' => $path,
             'cookie_domain' => $domain,
             'cookie_secure' => $secure,
-            'cookie_httponly' => $httponly
+            'cookie_httponly' => $httponly,
+            'cookie_lifetime' => array_key_exists('ttl', $this->config) ? $this->config['ttl'] : 0
         ];
-        $lifetime = array_key_exists('ttl', $this->config)
-            ? $this->config['ttl']
-            : 0;
 
         // Remove the separate cookie by setting it into the past
         if (array_key_exists('cookie_name', $this->config) && isset($_COOKIE[$this->config['cookie_name']])) {
@@ -217,7 +215,6 @@ class Session
             );
         }
 
-        self::$session->setOptions($options);
-        self::$session->regenerate(true, $lifetime);
+        self::$session->regenerate(true, null, $options);
     }
 }
