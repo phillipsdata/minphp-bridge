@@ -13,7 +13,7 @@
     "require": {
         "php": ">=5.4.0",
         "minphp/container": "^2.1",
-        "minphp/acl": "^1.0",
+        "minphp/acl": "^2.0",
         "minphp/cache": "^1.0",
         "minphp/configure": "^2.0",
         "minphp/date": "^1.0",
