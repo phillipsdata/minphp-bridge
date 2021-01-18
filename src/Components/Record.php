@@ -22,7 +22,7 @@ class Record extends MinphpRecord
             $dbInfo = [];
         }
 
-        // Get database info if available
+        // Get database info from the configuration if available
         $config_dbinfo = Configure::get('Database.profile');
 
         // Check if the connection is communicating with utf8mb4
