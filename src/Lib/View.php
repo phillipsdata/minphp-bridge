@@ -155,7 +155,19 @@ class View extends Language
         }
 
         if (!file_exists($file)) {
-            throw new Exception(sprintf('Files does not exist: %s', $file));
+            // In some instances when running minPHP on macOS from a network drive
+            // or an external drive, the file path is not correct due to the fact
+            // that "$this->view_path" may already include ROOTWEBDIR
+            if (strpos(strtolower(PHP_OS), 'darwin') !== false) {
+                $file = $this->view_path . 'views' . DIRECTORY_SEPARATOR
+                    . $this->view . DIRECTORY_SEPARATOR . $this->file . $this->view_ext;
+
+                if (!file_exists($file)) {
+                    throw new Exception(sprintf('Files does not exist: %s', $file));
+                }
+            } else {
+                throw new Exception(sprintf('Files does not exist: %s', $file));
+            }
         }
 
         ob_start(); // Start output buffering
