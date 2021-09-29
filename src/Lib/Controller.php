@@ -209,8 +209,9 @@ abstract class Controller
      *
      * @param string $view The name of the view file to render
      * @param string $dir The directory to find the given view in
-     * @return array A list containing:
+     * @return array A list containing: (optional)
      *
+     *  - view The name of the view file to render
      *  - params An array of parameters to set in the view
      *  - dir The directory to find the given view in
      */
@@ -224,8 +225,9 @@ abstract class Controller
      *
      * @param string $view The name of the view file to render
      * @param string $dir The directory to find the given view in
-     * @return array A list containing:
+     * @return array A list containing: (optional)
      *
+     *  - view The name of the view file to render
      *  - params An array of parameters to set in the view
      *  - dir The directory to find the given view in
      */
@@ -247,6 +249,9 @@ abstract class Controller
         $partial = clone $this->view;
 
         $vars = $this->prePartial($view, $dir);
+        if (isset($vars['view'])) {
+            $view = $vars['view'];
+        }
         if (isset($vars['params'])) {
             $params = array_merge((isset($params) ? $params : []), $vars['params']);
         }
@@ -259,6 +264,9 @@ abstract class Controller
         }
 
         $vars = $this->postPartial($view, $dir);
+        if (isset($vars['view'])) {
+            $view = $vars['view'];
+        }
         if (isset($vars['params'])) {
             $params = array_merge((isset($params) ? $params : []), $vars['params']);
         }
