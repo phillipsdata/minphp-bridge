@@ -215,9 +215,13 @@ abstract class Controller
      *  - params An array of parameters to set in the view
      *  - dir The directory to find the given view in
      */
-    public function prePartial($view, $dir = null)
+    public function prePartial($view, $params = null, $dir = null)
     {
-        // Nothing to do
+        return [
+            'view' => $view,
+            'params' => $params,
+            'dir' => $dir
+        ];
     }
 
     /**
@@ -231,9 +235,13 @@ abstract class Controller
      *  - params An array of parameters to set in the view
      *  - dir The directory to find the given view in
      */
-    public function postPartial($view, $dir = null)
+    public function postPartial($view, $params = null, $dir = null)
     {
-        // Nothing to do
+        return [
+            'view' => $view,
+            'params' => $params,
+            'dir' => $dir
+        ];
     }
 
     /**
