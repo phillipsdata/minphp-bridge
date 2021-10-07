@@ -215,7 +215,7 @@ abstract class Controller
      *  - params An array of parameters to set in the view
      *  - dir The directory to find the given view in
      */
-    public function prePartial($view, $params = null, $dir = null)
+    public function prePartial($view, $params = [], $dir = null)
     {
         return [
             'view' => $view,
@@ -235,7 +235,7 @@ abstract class Controller
      *  - params An array of parameters to set in the view
      *  - dir The directory to find the given view in
      */
-    public function postPartial($view, $params = null, $dir = null)
+    public function postPartial($view, $params = [], $dir = null)
     {
         return [
             'view' => $view,
@@ -256,7 +256,7 @@ abstract class Controller
     {
         $partial = clone $this->view;
 
-        $vars = $this->prePartial($view, $dir);
+        $vars = $this->prePartial($view, $params, $dir);
         if (isset($vars['view'])) {
             $view = $vars['view'];
         }
@@ -271,7 +271,7 @@ abstract class Controller
             $partial->set($params);
         }
 
-        $vars = $this->postPartial($view, $dir);
+        $vars = $this->postPartial($view, $params,$dir);
         if (isset($vars['view'])) {
             $view = $vars['view'];
         }
