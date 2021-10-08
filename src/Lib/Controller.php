@@ -208,6 +208,7 @@ abstract class Controller
      * Overwritable method called before the partial method
      *
      * @param string $view The name of the view file to render
+     * @param array $params An array of parameters to set in the view
      * @param string $dir The directory to find the given view in
      * @return array A list containing: (optional)
      *
@@ -215,7 +216,7 @@ abstract class Controller
      *  - params An array of parameters to set in the view
      *  - dir The directory to find the given view in
      */
-    public function prePartial($view, $params = [], $dir = null)
+    public function prePartial($view, $params = null, $dir = null)
     {
         return [
             'view' => $view,
@@ -228,6 +229,7 @@ abstract class Controller
      * Overwritable method called after the partial method
      *
      * @param string $view The name of the view file to render
+     * @param array $params An array of parameters to set in the view
      * @param string $dir The directory to find the given view in
      * @return array A list containing: (optional)
      *
@@ -235,7 +237,7 @@ abstract class Controller
      *  - params An array of parameters to set in the view
      *  - dir The directory to find the given view in
      */
-    public function postPartial($view, $params = [], $dir = null)
+    public function postPartial($view, $params = null, $dir = null)
     {
         return [
             'view' => $view,
