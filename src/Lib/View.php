@@ -28,6 +28,11 @@ class View extends Language
     public $view;
 
     /**
+     * @var string The location of the default view's files within the view path
+     */
+    public $default_view;
+
+    /**
      * @var string This view's relative path
      */
     public $view_dir;
@@ -59,6 +64,7 @@ class View extends Language
         $this->view = $settings['default_view'];
         $this->view_ext = $settings['view_extension'];
 
+        $this->default_view = $settings['default_view'];
         $this->default_view_path = $this->container->get('minphp.constants')['APPDIR'];
 
         $this->setView($file, $view);
@@ -154,12 +160,24 @@ class View extends Language
             extract($this->vars);
         }
 
+        // Fallback to the default view
+        if (!file_exists($file)) {
+            $file = $this->container->get('minphp.constants')['ROOTWEBDIR']
+                . $this->default_view_path . 'views' . DIRECTORY_SEPARATOR
+                . $this->default_view . DIRECTORY_SEPARATOR . $this->file . $this->view_ext;
+        }
+
         // In some instances when running minPHP on macOS from a network drive
         // or an external drive through a symbolic link, the file path is not
         // correct due to the fact that "$this->view_path" may already include ROOTWEBDIR
         if (!file_exists($file) && strpos(strtolower(PHP_OS), 'darwin') !== false) {
             $file = $this->view_path . 'views' . DIRECTORY_SEPARATOR
                 . $this->view . DIRECTORY_SEPARATOR . $this->file . $this->view_ext;
+
+            if (!file_exists($file)) {
+                $file = $this->default_view_path . 'views' . DIRECTORY_SEPARATOR
+                    . $this->default_view . DIRECTORY_SEPARATOR . $this->file . $this->view_ext;
+            }
         }
 
         if (!file_exists($file)) {
