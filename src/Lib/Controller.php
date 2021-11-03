@@ -205,6 +205,48 @@ abstract class Controller
     }
 
     /**
+     * Overwritable method called before the partial method
+     *
+     * @param string $view The name of the view file to render
+     * @param array $params An array of parameters to set in the view
+     * @param string $dir The directory to find the given view in
+     * @return array A list containing: (optional)
+     *
+     *  - view The name of the view file to render
+     *  - params An array of parameters to set in the view
+     *  - dir The directory to find the given view in
+     */
+    public function prePartial($view, $params = null, $dir = null)
+    {
+        return [
+            'view' => $view,
+            'params' => $params,
+            'dir' => $dir
+        ];
+    }
+
+    /**
+     * Overwritable method called after the partial method
+     *
+     * @param string $view The name of the view file to render
+     * @param array $params An array of parameters to set in the view
+     * @param string $dir The directory to find the given view in
+     * @return array A list containing: (optional)
+     *
+     *  - view The name of the view file to render
+     *  - params An array of parameters to set in the view
+     *  - dir The directory to find the given view in
+     */
+    public function postPartial($view, $params = null, $dir = null)
+    {
+        return [
+            'view' => $view,
+            'params' => $params,
+            'dir' => $dir
+        ];
+    }
+
+    /**
      * Returns the given view using the supplied params.
      *
      * @param string $view The name of the view file to render
@@ -216,9 +258,32 @@ abstract class Controller
     {
         $partial = clone $this->view;
 
+        $vars = $this->prePartial($view, $params, $dir);
+        if (isset($vars['view'])) {
+            $view = $vars['view'];
+        }
+        if (isset($vars['params'])) {
+            $params = array_merge((isset($params) ? $params : []), $vars['params']);
+        }
+        if (isset($vars['dir'])) {
+            $dir = $vars['dir'];
+        }
+
         if (is_array($params)) {
             $partial->set($params);
         }
+
+        $vars = $this->postPartial($view, $params,$dir);
+        if (isset($vars['view'])) {
+            $view = $vars['view'];
+        }
+        if (isset($vars['params'])) {
+            $params = array_merge((isset($params) ? $params : []), $vars['params']);
+        }
+        if (isset($vars['dir'])) {
+            $dir = $vars['dir'];
+        }
+
         return $partial->fetch($view, $dir);
     }
 
