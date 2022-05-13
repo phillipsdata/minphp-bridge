@@ -245,6 +245,17 @@ class Router
         $uri = [];
         $uri_str = $requestUri;
 
+        // Parse query string
+        if (strpos($requestUri, '?') !== false) {
+            $requestParts = explode('?', $requestUri, 2);
+            $requestUri = isset($requestParts[0]) ? $requestParts[0] : $requestUri;
+
+            if (isset($requestParts[1]) && empty($get)) {
+                parse_str($requestParts[1], $get);
+            }
+        }
+
+        // Parse URI without the query string
         $parsedUri = parse_url(
             Router::match(
                 Router::filterURI($requestUri)
@@ -286,7 +297,7 @@ class Router
 
         if (!empty($uriParts)) {
             $part = array_pop($uriParts);
-            if (!empty($part)) {
+            if (!empty($part) && substr($part, 0, 1) !== '?') {
                 $controller = $part;
             }
         }
