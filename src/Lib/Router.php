@@ -244,10 +244,20 @@ class Router
         $get = [];
         $uri = [];
         $uri_str = $requestUri;
+        $query_str = '';
 
+        // Parse query string
+        if (strpos($uri_str, '?') !== false) {
+            $requestParts = explode('?', $uri_str, 2);
+            $uri_str = $requestParts[0];
+            $query_str = $requestParts[1];
+            parse_str($query_str, $get);
+        }
+
+        // Parse URI without the query string
         $parsedUri = parse_url(
             Router::match(
-                Router::filterURI($requestUri)
+                Router::filterURI($uri_str)
             )
         );
 
@@ -256,7 +266,7 @@ class Router
             $uri_str = $parsedUri['path'];
         }
 
-        if (!isset($parsedUri['query']) && $uri_str[strlen($uri_str)-1] !== '/') {
+        if (empty($query_str) && $uri_str[strlen($uri_str)-1] !== '/') {
             $uri_str .= '/';
         }
 
@@ -274,8 +284,8 @@ class Router
             }
         }
 
-        if (isset($parsedUri['query'])) {
-            $query = '?' . $parsedUri['query'];
+        if (!empty($query_str)) {
+            $query = '?' . $query_str;
             $uri[] = $query;
             $uri_str .= $query;
         }
@@ -286,7 +296,7 @@ class Router
 
         if (!empty($uriParts)) {
             $part = array_pop($uriParts);
-            if (!empty($part)) {
+            if (!empty($part) && substr($part, 0, 1) !== '?') {
                 $controller = $part;
             }
         }
@@ -332,12 +342,6 @@ class Router
             } else {
                 $get[] = $part;
             }
-        }
-
-        if (isset($parsedUri['query'])) {
-            $query = [];
-            parse_str($parsedUri['query'], $query);
-            $get = array_merge($get, $query);
         }
         // End setting GET params
 
