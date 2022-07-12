@@ -106,15 +106,18 @@ class Router
     public static function match($uri)
     {
         if (is_array(self::$routes['orig']) && is_array(self::$routes['mapped'])) {
+            $parsed_uri = parse_url($uri);
+
             return self::unescape(
                 preg_replace(
                     self::$routes['orig'],
                     self::$routes['mapped'],
-                    $uri,
+                    $parsed_uri['path'],
                     1
                 )
-            );
+            ) . (isset($parsed_uri['query']) ? '?' . $parsed_uri['query'] : '');
         }
+
         return $uri;
     }
 
@@ -168,11 +171,14 @@ class Router
      */
     public static function filterURI($uri)
     {
-        return preg_replace(
-            "/^(" . self::escape(self::$webdir) . "|" . self::escape(dirname(self::$webdir)) . "|\/)/i",
-            "",
-            $uri,
-            1
+        return rtrim(
+            preg_replace(
+                "/^(" . self::escape(self::$webdir) . "|" . self::escape(dirname(self::$webdir)) . "|\/)/i",
+                "",
+                str_replace('/?', '?', $uri),
+                1
+            ),
+            '/'
         );
     }
 
@@ -201,7 +207,7 @@ class Router
 
                 // A method may be required to inherit from the given class
                 if (($inheritsFrom !== null
-                    && (
+                        && (
                             $declaredClass->getName() != $inheritsFrom
                             && !$declaredClass->isSubclassOf($inheritsFrom)
                         )
@@ -244,20 +250,10 @@ class Router
         $get = [];
         $uri = [];
         $uri_str = $requestUri;
-        $query_str = '';
 
-        // Parse query string
-        if (strpos($uri_str, '?') !== false) {
-            $requestParts = explode('?', $uri_str, 2);
-            $uri_str = $requestParts[0];
-            $query_str = $requestParts[1];
-            parse_str($query_str, $get);
-        }
-
-        // Parse URI without the query string
         $parsedUri = parse_url(
             Router::match(
-                Router::filterURI($uri_str)
+                Router::filterURI($requestUri)
             )
         );
 
@@ -266,15 +262,15 @@ class Router
             $uri_str = $parsedUri['path'];
         }
 
-        if (empty($query_str) && $uri_str[strlen($uri_str)-1] !== '/') {
+        if (!isset($parsedUri['query']) && $uri_str[strlen($uri_str)-1] !== '/') {
             $uri_str .= '/';
         }
 
         $pathParts = array_reverse(explode(
             '/',
             isset($parsedUri['path'])
-            ? $parsedUri['path']
-            : null
+                ? $parsedUri['path']
+                : null
         ));
 
         // Begin building URI
@@ -284,8 +280,8 @@ class Router
             }
         }
 
-        if (!empty($query_str)) {
-            $query = '?' . $query_str;
+        if (isset($parsedUri['query'])) {
+            $query = '?' . $parsedUri['query'];
             $uri[] = $query;
             $uri_str .= $query;
         }
@@ -296,7 +292,7 @@ class Router
 
         if (!empty($uriParts)) {
             $part = array_pop($uriParts);
-            if (!empty($part) && substr($part, 0, 1) !== '?') {
+            if (!empty($part)) {
                 $controller = $part;
             }
         }
@@ -342,6 +338,12 @@ class Router
             } else {
                 $get[] = $part;
             }
+        }
+
+        if (isset($parsedUri['query'])) {
+            $query = [];
+            parse_str($parsedUri['query'], $query);
+            $get = array_merge($get, $query);
         }
         // End setting GET params
 
