@@ -175,7 +175,7 @@ class Router
             preg_replace(
                 "/^(" . self::escape(self::$webdir) . "|" . self::escape(dirname(self::$webdir)) . "|\/)/i",
                 "",
-                str_replace('/?', '?', $uri),
+                $uri,
                 1
             ),
             '/'
