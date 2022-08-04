@@ -112,7 +112,7 @@ class Router
                 preg_replace(
                     self::$routes['orig'],
                     self::$routes['mapped'],
-                    $parsed_uri['path'],
+                    (isset($parsed_uri['path']) ? $parsed_uri['path'] : ''),
                     1
                 )
             ) . (isset($parsed_uri['query']) ? '?' . $parsed_uri['query'] : '');
