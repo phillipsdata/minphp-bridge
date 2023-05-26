@@ -116,6 +116,10 @@ class Dispatcher extends Controller
             );
         }
 
+        if (null === $action) {
+            $action = 'index';
+        }
+        
         $ctrl = new $controllerClass($controller, $action, $isCli);
         $ctrl->uri = $uri;
         $ctrl->get = $get;
@@ -131,10 +135,6 @@ class Dispatcher extends Controller
         }
 
         $ctrl->preAction();
-
-        if (null === $action) {
-            $action = 'index';
-        }
 
         $result = null;
         if (method_exists($ctrl, $action)) {
