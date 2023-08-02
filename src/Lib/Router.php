@@ -160,7 +160,7 @@ class Router
      */
     public static function parseURI($uri)
     {
-        return explode('/', str_replace('?', '/?', $uri));
+        return explode('/', str_replace('?', '/?', $uri ?? ''));
     }
 
     /**
@@ -175,7 +175,7 @@ class Router
             preg_replace(
                 "/^(" . self::escape(self::$webdir) . "|" . self::escape(dirname(self::$webdir)) . "|\/)/i",
                 "",
-                $uri,
+                $uri ?? '', 
                 1
             ),
             '/'
