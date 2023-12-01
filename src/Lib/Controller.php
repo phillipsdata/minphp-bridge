@@ -5,6 +5,7 @@ use Minphp\Bridge\Initializer;
 /**
  * Controller Bridge
  */
+#[\AllowDynamicProperties]
 abstract class Controller
 {
     /**

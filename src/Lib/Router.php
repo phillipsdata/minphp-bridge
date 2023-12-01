@@ -3,6 +3,7 @@
 /**
  * Handles mapping of URIs from one type to another
  */
+#[\AllowDynamicProperties]
 class Router
 {
     /**

@@ -10,6 +10,7 @@ use Minphp\Session\Handlers\PdoHandler;
  * Intended for legacy backwards compatibility ONLY.
  * Use Minphp\Session\Session instead.
  */
+#[\AllowDynamicProperties]
 class Session
 {
     private static $session = null;

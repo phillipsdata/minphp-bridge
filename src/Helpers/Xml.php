@@ -8,6 +8,7 @@ use Minphp\Xml\Xml as MinphpXml;
  * Intended for legacy backwards compatibility ONLY.
  * Use Minphp\Xml\Xml instead.
  */
+#[\AllowDynamicProperties]
 class Xml extends MinphpXml
 {
 

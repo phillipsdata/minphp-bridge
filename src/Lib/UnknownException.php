@@ -3,6 +3,7 @@
 /**
  * Backwards Compatible UnknownException replacement
  */
+#[\AllowDynamicProperties]
 class UnknownException extends ErrorException
 {
 

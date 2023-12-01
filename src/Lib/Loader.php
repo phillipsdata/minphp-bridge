@@ -3,6 +3,7 @@
 /**
  * Handles the loading of various files and objects
  */
+#[\AllowDynamicProperties]
 class Loader
 {
     private static $paths;
@@ -123,6 +124,8 @@ class Loader
      *
      * @param object $parent The object to which to attach the given models
      * @param array $models An array of models to load and initialize
+     * @deprecated Since PHP >=8.2, dynamic properties has been deprecated, use Loader::model() instead
+     * @see https://php.watch/versions/8.2/dynamic-properties-deprecated
      */
     public static function loadModels($parent, $models)
     {
@@ -130,10 +133,26 @@ class Loader
     }
 
     /**
+     * Loads a model, which may or may not exist within a plugin of the same
+     * name. First looks in the plugin directory, if no match is found, looks
+     * in the models directory.
+     *
+     * @param array $class The name of the model to load and initialize
+     * @param object $parent The variable to which to attach the model instance
+     * @param array $params An array of parameters for the class constructor (optional)
+     */
+    public static function model($class, &$parent, array $params = [])
+    {
+        self::loadInstance($class, $parent, $params, 'models');
+    }
+
+    /**
      * Loads the given components, attaching them to the given parent object.
      *
      * @param object $parent The parent to which to attach the given components
      * @param array $components An array of components and [optionally] their parameters
+     * @deprecated Since PHP >=8.2, dynamic properties has been deprecated, use Loader::component() instead
+     * @see https://php.watch/versions/8.2/dynamic-properties-deprecated
      */
     public static function loadComponents($parent, $components)
     {
@@ -141,10 +160,26 @@ class Loader
     }
 
     /**
+     * Loads a component, which may or may not exist within a plugin of the same
+     * name. First looks in the plugin directory, if no match is found, looks
+     * in the models directory.
+     *
+     * @param array $class The name of the component to load and initialize
+     * @param object $parent The variable to which to attach the component instance
+     * @param array $params An array of parameters for the class constructor (optional)
+     */
+    public static function component($class, &$parent, array $params = [])
+    {
+        self::loadInstance($class, $parent, $params, 'components');
+    }
+
+    /**
      * Loads the given helpers, attaching them to the given parent object.
      *
      * @param object $parent The parent to which to attach the given helpers
      * @param array $helpers An array of helpers and [optionally] their parameters
+     * @deprecated Since PHP >=8.2, dynamic properties has been deprecated, use Loader::helper() instead
+     * @see https://php.watch/versions/8.2/dynamic-properties-deprecated
      */
     public static function loadHelpers($parent, $helpers)
     {
@@ -156,6 +191,20 @@ class Loader
             $parents[] = $parent->structure;
         }
         self::loadInstances($helpers, $parents, 'helpers');
+    }
+
+    /**
+     * Loads a helper, which may or may not exist within a plugin of the same
+     * name. First looks in the plugin directory, if no match is found, looks
+     * in the models directory.
+     *
+     * @param array $class The name of the helper to load and initialize
+     * @param object $parent The variable to which to attach the helper instance
+     * @param array $params An array of parameters for the class constructor (optional)
+     */
+    public static function helper($class, &$parent, array $params = [])
+    {
+        self::loadInstance($class, $parent, $params, 'helpers');
     }
 
     /**
@@ -221,6 +270,8 @@ class Loader
      * @param array $classes An array of classes or class/param pairs
      * @param array $set_in An array of objects to set the loaded class into
      * @param string $type The type of class to load (helpers, components, models, controllers, null for all)
+     * @deprecated Since PHP >=8.2, dynamic properties has been deprecated, use Loader::loadInstance() instead
+     * @see https://php.watch/versions/8.2/dynamic-properties-deprecated
      */
     private static function loadInstances(array $classes, array $set_in = [], $type = null)
     {
@@ -255,6 +306,40 @@ class Loader
                 $parent->$class_name = $object;
             }
         }
+    }
+
+    /**
+     * Load a new instance of the given class. Class can be in the format of
+     * 'ClassName' or 'PluginName.ClassName'.
+     *
+     * @param string $classe The name of the class to initialize
+     * @param mixed &$parent The container variable for the class
+     * @param array $params An array of parameters for the class constructor (optional)
+     * @param string $type The type of class to load (helpers, components, models, controllers, null for all)
+     */
+    private static function loadInstance($class, &$parent, array $params = [], $type = null)
+    {
+        $class = self::toCamelCase($class);
+
+        // Include plugin model/controller base classes, if they exist
+        // e.g. when a plugin loads another plugin
+        $class_parts = self::parseClassName($class);
+        $class_name = $class_parts['class'];
+        $plugin = $class_parts['plugin'];
+
+        if ($plugin !== null) {
+            $plugin_name = self::toCamelCase(trim($plugin, DIRECTORY_SEPARATOR));
+            self::autoload($plugin_name . '.' . $plugin_name . 'Model');
+            self::autoload($plugin_name . '.' . $plugin_name . 'Controller');
+        }
+
+        // Autoload the given class
+        if (!class_exists($class, true)) {
+            self::autoload($class, $type);
+        }
+
+        // Create an instance of the class by class name, not the class (e.g. Plugin.ClassName)
+        $parent = self::createInstance($class_name, $params);
     }
 
     /**

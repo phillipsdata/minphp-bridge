@@ -8,6 +8,7 @@ use Minphp\Pagination\Pagination as MinphpPagination;
  * Intended for legacy backwards compatibility ONLY.
  * Use Minphp\Pagination\Pagination instead.
  */
+#[\AllowDynamicProperties]
 class Pagination extends MinphpPagination
 {
 

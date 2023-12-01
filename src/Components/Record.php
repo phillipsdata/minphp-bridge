@@ -9,6 +9,7 @@ use Minphp\Record\Record as MinphpRecord;
  * Intended for legacy backwards compatibility ONLY.
  * Use Minphp\Record\Record instead.
  */
+#[\AllowDynamicProperties]
 class Record extends MinphpRecord
 {
     /**

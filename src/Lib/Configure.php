@@ -9,6 +9,7 @@ use Minphp\Configure\Configure as MinphpConfigure;
  * Intended for legacy backwards compatibility ONLY.
  * Use Minphp\Configure\Configure instead.
  */
+#[\AllowDynamicProperties]
 class Configure
 {
     private static $configure;

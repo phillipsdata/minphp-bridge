@@ -10,6 +10,7 @@ use Router;
  *
  * Obtains the container for use by bridged libraries to manage dependencies
  */
+#[\AllowDynamicProperties]
 class Initializer implements ContainerAwareInterface
 {
     private static $initializer;

@@ -8,6 +8,7 @@ use Minphp\Date\Date as MinphpDate;
  * Intended for legacy backwards compatibility ONLY.
  * Use Minphp\Date\Date instead.
  */
+#[\AllowDynamicProperties]
 class Date extends MinphpDate
 {
 

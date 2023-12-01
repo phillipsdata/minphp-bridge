@@ -6,6 +6,7 @@ use Minphp\Bridge\Initializer;
 /**
  * Model Bridge
  */
+#[\AllowDynamicProperties]
 class Model extends PdoConnection
 {
     /**
