@@ -125,7 +125,7 @@ class Loader
      * @param object $parent The object to which to attach the given models
      * @param array $models An array of models to load and initialize
      * @deprecated Since PHP >=8.2, dynamic properties has been deprecated, use Loader::model() instead
-     * @see https://php.watch/versions/8.2/dynamic-properties-deprecated
+     * @see https://wiki.php.net/rfc/deprecate_dynamic_properties
      */
     public static function loadModels($parent, $models)
     {
@@ -152,7 +152,7 @@ class Loader
      * @param object $parent The parent to which to attach the given components
      * @param array $components An array of components and [optionally] their parameters
      * @deprecated Since PHP >=8.2, dynamic properties has been deprecated, use Loader::component() instead
-     * @see https://php.watch/versions/8.2/dynamic-properties-deprecated
+     * @see https://wiki.php.net/rfc/deprecate_dynamic_properties
      */
     public static function loadComponents($parent, $components)
     {
@@ -179,7 +179,7 @@ class Loader
      * @param object $parent The parent to which to attach the given helpers
      * @param array $helpers An array of helpers and [optionally] their parameters
      * @deprecated Since PHP >=8.2, dynamic properties has been deprecated, use Loader::helper() instead
-     * @see https://php.watch/versions/8.2/dynamic-properties-deprecated
+     * @see https://wiki.php.net/rfc/deprecate_dynamic_properties
      */
     public static function loadHelpers($parent, $helpers)
     {
@@ -271,7 +271,7 @@ class Loader
      * @param array $set_in An array of objects to set the loaded class into
      * @param string $type The type of class to load (helpers, components, models, controllers, null for all)
      * @deprecated Since PHP >=8.2, dynamic properties has been deprecated, use Loader::loadInstance() instead
-     * @see https://php.watch/versions/8.2/dynamic-properties-deprecated
+     * @see https://wiki.php.net/rfc/deprecate_dynamic_properties
      */
     private static function loadInstances(array $classes, array $set_in = [], $type = null)
     {
