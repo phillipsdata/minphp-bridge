@@ -5,7 +5,6 @@ use Minphp\Bridge\Initializer;
 /**
  * Dispatcher Bridge
  */
-#[\AllowDynamicProperties]
 class Dispatcher extends Controller
 {
     /**

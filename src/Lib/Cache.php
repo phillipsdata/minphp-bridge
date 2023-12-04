@@ -9,7 +9,6 @@ use Minphp\Cache\Cache as MinphpCache;
  * Intended for legacy backwards compatibility ONLY.
  * Use Minphp\Cache\Cache instead.
  */
-#[\AllowDynamicProperties]
 class Cache
 {
     private static $cache;
