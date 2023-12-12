@@ -8,6 +8,7 @@ use Minphp\Javascript\Javascript as MinphpJavascript;
  * Intended for legacy backwards compatibility ONLY.
  * Use Minphp\Javascript\Javascript instead.
  */
+#[\AllowDynamicProperties]
 class Javascript extends MinphpJavascript
 {
 

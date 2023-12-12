@@ -8,6 +8,7 @@ use Minphp\Form\Form as MinphpForm;
  * Intended for legacy backwards compatibility ONLY.
  * Use Minphp\Form\Form instead.
  */
+#[\AllowDynamicProperties]
 class Form extends MinphpForm
 {
     /**

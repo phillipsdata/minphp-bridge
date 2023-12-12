@@ -8,6 +8,7 @@ use Minphp\Input\Input as MinphpInput;
  * Intended for legacy backwards compatibility ONLY.
  * Use Minphp\Input\Input instead.
  */
+#[\AllowDynamicProperties]
 class Input extends MinphpInput
 {
 

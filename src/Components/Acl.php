@@ -10,6 +10,7 @@ use Minphp\Acl\Acl as MinphpAcl;
  * Intended for legacy backwards compatibility ONLY.
  * Use Minphp\Acl\Acl instead.
  */
+#[\AllowDynamicProperties]
 class Acl extends MinphpAcl
 {
     /**

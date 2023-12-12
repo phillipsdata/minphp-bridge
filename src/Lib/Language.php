@@ -9,6 +9,7 @@ use Minphp\Language\Language as MinphpLanguage;
  * Intended for legacy backwards compatibility ONLY.
  * Use Minphp\Language\Language instead.
  */
+#[\AllowDynamicProperties]
 class Language extends MinphpLanguage
 {
     /**
@@ -41,7 +42,7 @@ class Language extends MinphpLanguage
     {
         // @codingStandardsIgnoreEnd
         self::ensureSettings();
-        return call_user_func_array('parent::getText', func_get_args());
+        return call_user_func_array([get_parent_class(), 'getText'], func_get_args());
     }
 
     /**
@@ -50,7 +51,7 @@ class Language extends MinphpLanguage
     public static function getText($key, $return = false)
     {
         self::ensureSettings();
-        return call_user_func_array('parent::getText', func_get_args());
+        return call_user_func_array([get_parent_class(), 'getText'], func_get_args());
     }
 
     /**
@@ -59,6 +60,6 @@ class Language extends MinphpLanguage
     public static function loadLang($file, $language = null, $dir = null)
     {
         self::ensureSettings();
-        call_user_func_array('parent::loadLang', func_get_args());
+        call_user_func_array([get_parent_class(), 'loadLang'], func_get_args());
     }
 }

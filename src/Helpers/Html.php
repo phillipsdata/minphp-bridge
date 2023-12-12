@@ -8,6 +8,7 @@ use Minphp\Html\Html as MinphpHtml;
  * Intended for legacy backwards compatibility ONLY.
  * Use Minphp\Html\Html instead.
  */
+#[\AllowDynamicProperties]
 class Html extends MinphpHtml
 {
 

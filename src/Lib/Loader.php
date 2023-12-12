@@ -3,6 +3,7 @@
 /**
  * Handles the loading of various files and objects
  */
+#[\AllowDynamicProperties]
 class Loader
 {
     private static $paths;
@@ -252,7 +253,7 @@ class Loader
             // Create an instance of the class by class name, not the class (e.g. Plugin.ClassName)
             $object = self::createInstance($class_name, $value);
             foreach ($set_in as $parent) {
-                $parent->$class_name = $object;
+                @$parent->$class_name = $object;
             }
         }
     }

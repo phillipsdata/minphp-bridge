@@ -5,6 +5,7 @@ use Minphp\Bridge\Initializer;
 /**
  * Allows the creation of views.
  */
+#[\AllowDynamicProperties]
 class View extends Language
 {
     /**
