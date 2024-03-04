@@ -343,6 +343,16 @@ class Router
         if (isset($parsedUri['query'])) {
             $query = [];
             parse_str($parsedUri['query'], $query);
+
+            $query = array_flip(
+                array_filter(
+                    array_flip($query),
+                    function ($key) {
+                        return !is_numeric($key);
+                    }
+                )
+            );
+
             $get = array_merge($get, $query);
         }
         // End setting GET params
