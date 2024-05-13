@@ -275,7 +275,7 @@ class Router
 
         // Begin building URI
         for ($i = count($pathParts)-1; $i >= 0; $i--) {
-            if (!empty($pathParts[$i])) {
+            if ($pathParts[$i] != '' && $pathParts[$i] != null) {
                 $uri[] = $pathParts[$i];
             }
         }
@@ -327,7 +327,7 @@ class Router
         while (!empty($uriParts)) {
             $part = array_pop($uriParts);
             // Only assign GET parameters that are not query parameters
-            if (empty($part) || substr($part, 0, 1) === '?') {
+            if ($part === '' || $part === null || substr($part, 0, 1) === '?') {
                 continue;
             }
 
