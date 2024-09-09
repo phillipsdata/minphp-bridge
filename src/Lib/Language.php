@@ -57,7 +57,16 @@ class Language extends MinphpLanguage
     /**
      * {@inheritdoc}
      */
-    public static function loadLang($file, $language = null, $dir = null)
+    public static function loadOverride($file, $language = null, $dir = null, $override = false)
+    {
+        self::ensureSettings();
+        call_user_func_array([get_parent_class(), 'loadOverride'], func_get_args());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function loadLang($file, $language = null, $dir = null, $override = false)
     {
         self::ensureSettings();
         call_user_func_array([get_parent_class(), 'loadLang'], func_get_args());
