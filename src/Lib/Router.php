@@ -344,13 +344,12 @@ class Router
             $query = [];
             parse_str($parsedUri['query'], $query);
 
-            $query = array_flip(
-                array_filter(
-                    array_flip($query),
-                    function ($key) {
-                        return !is_numeric($key);
-                    }
-                )
+            $query = array_filter(
+                $query,
+                function ($key) {
+                    return !is_numeric($key);
+                },
+                ARRAY_FILTER_USE_KEY
             );
 
             $get = array_merge($get, $query);
