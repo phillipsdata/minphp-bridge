@@ -42,7 +42,7 @@ class Language extends MinphpLanguage
     {
         // @codingStandardsIgnoreEnd
         self::ensureSettings();
-        return call_user_func_array([get_parent_class(), 'getText'], func_get_args());
+        return call_user_func_array([get_parent_class(self::class), 'getText'], func_get_args());
     }
 
     /**
@@ -51,16 +51,16 @@ class Language extends MinphpLanguage
     public static function getText($key, $return = false)
     {
         self::ensureSettings();
-        return call_user_func_array([get_parent_class(), 'getText'], func_get_args());
+        return call_user_func_array([get_parent_class(self::class), 'getText'], func_get_args());
     }
-
+    
     /**
      * {@inheritdoc}
      */
     public static function loadOverride($file, $language = null, $dir = null, $override = false)
     {
         self::ensureSettings();
-        call_user_func_array([get_parent_class(), 'loadOverride'], func_get_args());
+        call_user_func_array([get_parent_class(self::class), 'loadOverride'], func_get_args());
     }
 
     /**
@@ -69,6 +69,6 @@ class Language extends MinphpLanguage
     public static function loadLang($file, $language = null, $dir = null, $override = false)
     {
         self::ensureSettings();
-        call_user_func_array([get_parent_class(), 'loadLang'], func_get_args());
+        call_user_func_array([get_parent_class(self::class), 'loadLang'], func_get_args());
     }
 }
