@@ -185,6 +185,7 @@ class Router
     /**
      * Uses PHP's ReflectionClass to test the given object for the given method's callability.
      * Only public, non-abstract, non-constructor/destructors are considered callable.
+     * Also supports objects that implement the magic methods __call or __callStatic.
      *
      * @param Object $obj The object we're searching
      * @param string $method The name of the method we're looking for in $obj
@@ -201,8 +202,32 @@ class Router
                 return false;
             }
 
+            $reflectedMethod = false;
             try {
                 $reflectedMethod = $reflectedObj->getMethod($method);
+            } catch (ReflectionException $e) {
+                // The method does not exist on the object, but could still be available, e.g., via __call
+            }
+
+            // If the method does not exist, but is still callable (e.g. via __call), then only ensure it meets
+            // the same criteria on inheritance and public uncallables
+            if ($reflectedMethod === false) {
+                try {
+                    return (
+                        is_callable([$obj, $method])
+                        && !in_array(strtolower($method), $publicUncallables)
+                        && (
+                            $inheritsFrom === null
+                            || $reflectedObj->getName() == $inheritsFrom
+                            || $reflectedObj->isSubclassOf($inheritsFrom)
+                        )
+                    );
+                } catch (Exception $e) {
+                    return false;
+                }
+            }
+
+            try {
                 $declaredClass = $reflectedMethod->getDeclaringClass();
 
                 // A method may be required to inherit from the given class
@@ -223,6 +248,8 @@ class Router
                 }
                 return true;
             } catch (ReflectionException $e) {
+                return false;
+            } catch (Exception $e) {
                 return false;
             }
         }

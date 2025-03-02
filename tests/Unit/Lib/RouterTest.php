@@ -138,6 +138,31 @@ class RouterTest extends PHPUnit_Framework_TestCase
         $this->assertFalse(Router::isCallable($controller, 'preAction'));
         $this->assertFalse(Router::isCallable($controller, 'nonexistentMethod'));
         $this->assertFalse(Router::isCallable(null, null));
+
+        #
+        # TODO: add tests for __call
+        # NOTE: phpunit currently cannot handle mocking __call properly
+        # see https://github.com/sebastianbergmann/phpunit-mock-objects/issues/275
+        #
+        /*
+        $magicController = $this->getMockBuilder('Controller')
+            ->disableOriginalConstructor()
+            ->setMethods(['__call'])
+            ->getMock();
+
+        $value = 'testAbc';
+        $magicController->expects($this->any())
+            ->method('__call')
+            ->willReturnCallback(function($name, $arguments) use ($value) {
+                return $value;
+            });
+
+        $this->assertTrue(Router::isCallable($magicController, 'index'));
+        $this->assertTrue(Router::isCallable($magicController, '__construct'));
+        $this->assertTrue(Router::isCallable($magicController, 'preAction'));
+        $this->assertTrue(Router::isCallable($magicController, 'nonexistentMethod'));
+         *
+         */
     }
 
     /**
