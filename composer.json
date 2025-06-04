@@ -21,7 +21,7 @@
         "minphp/html": "^1.0",
         "minphp/input": "^1.0",
         "minphp/javascript": "^1.0",
-        "minphp/language": "^1.1.1",
+        "minphp/language": "~1.1.1",
         "minphp/pagination": "^1.0",
         "minphp/record": "^3.0",
         "minphp/session": "^1.2.1",
