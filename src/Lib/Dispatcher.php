@@ -137,7 +137,7 @@ class Dispatcher extends Controller
         $ctrl->preAction();
 
         $result = null;
-        if (method_exists($ctrl, $action)) {
+        if (method_exists($ctrl, $action) || is_callable([$ctrl, $action])) {
             if ($router->isCallable($ctrl, $action)) {
                 $result = $ctrl->$action();
             } else {
